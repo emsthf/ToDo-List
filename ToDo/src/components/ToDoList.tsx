@@ -7,6 +7,7 @@ import ToDo from "./ToDo";
 function ToDoList() {
   // Recoil에서 값을 가져오고 수정할 때 쓰는 함수. useState와 닮았다
   const toDos = useRecoilValue(toDoState);
+  console.log(toDos);
 
   return (
     <div>
