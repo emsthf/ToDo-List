@@ -1,6 +1,6 @@
 import React from "react";
 import { useSetRecoilState } from "recoil";
-import { IToDo, toDoState } from "../atoms";
+import { Categories, IToDo, toDoState } from "../atoms";
 
 function ToDo({ text, category, id }: IToDo) {
   const setToDos = useSetRecoilState(toDoState);
@@ -14,12 +14,13 @@ function ToDo({ text, category, id }: IToDo) {
       // oldToDos는 배열
       // 배열의 인덱스를 찾아서 수정하기 위해 toDo의 id가 props에서 온 id와 같은지 비교
       const targetIndex = oldToDos.findIndex((toDO) => toDO.id === id);
-      const oldToDo = oldToDos[targetIndex];
       // props로 온 text와 id는 그대로 유지한 채, category만 event로 읽은 name으로 교체
-      const newToDo = { text, id, category: name };
-      console.log("replace the to do in the index", targetIndex, "with", newToDo);
-
-      return oldToDos;
+      const newToDo = { text, id, category: name as any };
+      return [
+        ...oldToDos.slice(0, targetIndex),
+        newToDo,
+        ...oldToDos.slice(targetIndex + 1),
+      ];
     });
   };
 
@@ -28,18 +29,18 @@ function ToDo({ text, category, id }: IToDo) {
       <span>{text}</span>
       {/* && 앞의 조건이 true 이면 뒷 부분 실행
       ex) 카테고리가 "TO_DO"가 아니면 To Do 버튼 생성 */}
-      {category !== "TO_DO" && (
-        <button name="TO_DO" onClick={onClick}>
+      {category !== Categories.TO_DO && (
+        <button name={Categories.TO_DO} onClick={onClick}>
           To Do
         </button>
       )}
-      {category !== "DOING" && (
-        <button name="DOING" onClick={onClick}>
+      {category !== Categories.DOING && (
+        <button name={Categories.DOING} onClick={onClick}>
           Doing
         </button>
       )}
-      {category !== "DONE" && (
-        <button name="DONE" onClick={onClick}>
+      {category !== Categories.DONE && (
+        <button name={Categories.DONE} onClick={onClick}>
           Done
         </button>
       )}
